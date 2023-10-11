@@ -19,7 +19,6 @@ export abstract class TemplateExpress {
     public abstract setRoutes(): void;
 
     public async registerRoute(routerPath: string, route: string): Promise<void> {
-        log.warn(routerPath);
         const routerModel: RouterModel = await import(routerPath).then((imp) => imp.default);
         this.setRoute(routerModel.register(this._router), route);
     }
