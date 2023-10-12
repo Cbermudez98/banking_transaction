@@ -1,3 +1,7 @@
+import { join } from 'path';
+import { globSync } from 'glob';
+import SwaggerJsDoc from 'swagger-jsdoc';
+import * as SwaggerUI from "swagger-ui-express";
 import express, { Application, Router } from "express";
 import cors from "cors";
 import { FrameworkConfig } from "../config/FrameworkConfig";
@@ -28,7 +32,9 @@ export abstract class TemplateExpress {
     }
 
     private setRoute(route: Router, name: string) {
+        const swagger = this.initSwagger();
         this._app.use(`${this._app.get("API_VERSION")}/${name}`, route);
+        this._app.use(`${this._app.get("API_VERSION")}/api-docs`, SwaggerUI.serve, SwaggerUI.setup(SwaggerJsDoc(swagger)));
     }
 
     private setUp(): void {
@@ -41,5 +47,27 @@ export abstract class TemplateExpress {
     private setMiddlewares() {
         this._app.use(express.json());
         this._app.use(cors());
+    }
+
+    private initSwagger(){
+        return {
+            definition: {
+                openapi: "3.0.1",
+                info: {
+                    version: "1.0.0",
+                    title: "banking transaction",
+                    description: "Using Mysql TCL",
+                    contact: {
+                        name: "Cesar Bermudez",
+                        email: "cesar.bermudez.sierra@gmail.com",
+                        url: "https://www.linkedin.com/in/cesar-bermudez-sierra/"
+                    },
+                    servers: [`http://localhost:${this._app.get("PORT")}`],
+                    schemes: ["http", "https"],
+                },
+                basePath: "/",
+            },
+            apis: globSync('src/apps/**/ApiRest.*').map((route: string) => join(process.cwd(), route))
+        };
     }
 }
