@@ -72,5 +72,3 @@ The objective of this project is to develop a REST API for managing bank account
 
 - A fully functional REST API that meets the mentioned requirements.
 - API documentation explaining how to use it, including routes, methods, and examples of requests and responses.
-
-This project will provide you with an opportunity to learn how to work with transactions in a relational database in the context of a real-world application. Additionally, it will allow you to practice developing RESTful APIs with Node.js and Express.js.
