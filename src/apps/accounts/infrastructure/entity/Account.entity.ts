@@ -1,4 +1,5 @@
 import { DepositEntity } from '../../../deposits/infrastructure/entity/Deposit.entity';
+import { WithdrawalEntity } from '../../../withdrawals/infrastructure/entity/Withdrawal.entity';
 import { IAccount } from './../../domain/IAccount';
 import { PrimaryGeneratedColumn ,Column, Entity, OneToOne, OneToMany } from "typeorm";
 
@@ -18,4 +19,7 @@ export class AccountEntity implements IAccount {
 
     @OneToMany(() => DepositEntity, deposit => deposit.account)
     deposits: DepositEntity[];
+
+    @OneToMany(() => WithdrawalEntity, withdrawal => withdrawal.account)
+    withdrawals: WithdrawalEntity[]
 }

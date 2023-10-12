@@ -4,7 +4,6 @@ import { IDepositRepository } from "../../domain/repository/IDepositRepository";
 import { DepositEntity } from "../entity/Deposit.entity";
 import { appDataSource } from "../../../../infrastructure/typeorm/typeorm";
 import { AccountEntity } from "../../../accounts/infrastructure/entity/Account.entity";
-import log from "../../../../helper/LoggerServer";
 
 export class DepositRepository implements IDepositRepository {
     private _depositRepository: Repository<DepositEntity>;
@@ -27,7 +26,6 @@ export class DepositRepository implements IDepositRepository {
             await queryRunner.commitTransaction();
             return newDeposit;
         } catch (error) {
-            log.error(error);
             queryRunner.rollbackTransaction();
             throw error;
         }
