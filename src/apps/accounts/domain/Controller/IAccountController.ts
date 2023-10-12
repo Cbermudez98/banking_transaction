@@ -1,6 +1,7 @@
 import { IResponseModel } from "../../../../domain/ResponseModel";
-import { IAccountCreateDto } from "../IAccount";
+import { IAccount, IAccountCreateDto } from "../IAccount";
 
 export interface IAccountController {
     createAccount: (account: IAccountCreateDto) => Promise<IResponseModel>;
+    getAccount: (accountNumber: IAccount["accountNumber"]) => Promise<IResponseModel>;
 }

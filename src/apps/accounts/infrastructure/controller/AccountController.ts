@@ -18,4 +18,20 @@ export class AccountController implements IAccountController {
             data: createdAccount
         };
     }
+
+    async getAccount(accountNumber: number): Promise<IResponseModel> {
+        try {
+            const response = await this._accountUseCase.getAccount(accountNumber);
+            return {
+                status: HttpStatusCode.RESPONSE_SUCCESS,
+                data: { balance: response.openingBalance }
+            };
+        } catch (error) {
+            const err = <Error>error;
+            throw {
+                status: HttpStatusCode.NOT_FOUND,
+                message: err.message
+            };
+        }
+    };
 }

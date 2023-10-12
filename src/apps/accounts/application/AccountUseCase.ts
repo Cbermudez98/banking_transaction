@@ -14,6 +14,16 @@ export class AccountUseCase implements IAccountUseCase {
         return await this._accountRepository.createAccount(account);
     };
 
+    async getAccount(accountNumber: number): Promise<IAccount> {
+        try {
+            const account = await this._accountRepository.getAccount(accountNumber);
+            if (!account) throw new Error("Account not found");
+            return account;
+        } catch (error) {
+            throw error;
+        }
+    };
+
     private async generateNewNumberAccount(): Promise<number> {
         const generateRandom = () => Math.floor(Math.random() * 10000000) + 1;
         let found: boolean = false;
