@@ -7,7 +7,7 @@ import cors from "cors";
 import { FrameworkConfig } from "../config/FrameworkConfig";
 import Constant from "../../../utils/Constant";
 import { RouterModel } from "../model/RouterModel";
-import log from "../../../helper/LoggerServer";
+import log from '../../../helper/LoggerServer';
 
 export abstract class TemplateExpress {
     private _frameworkConfig: FrameworkConfig;
@@ -32,14 +32,15 @@ export abstract class TemplateExpress {
     }
 
     private setRoute(route: Router, name: string) {
+        log.info(name);
         const swagger = this.initSwagger();
         this._app.use(`${this._app.get("API_VERSION")}/${name}`, route);
-        this._app.use(`${this._app.get("API_VERSION")}/api-docs`, SwaggerUI.serve, SwaggerUI.setup(SwaggerJsDoc(swagger)));
+        this._app.use(`/api-docs`, SwaggerUI.serve, SwaggerUI.setup(SwaggerJsDoc(swagger)));
     }
 
     private setUp(): void {
         this._app.set("PORT", Constant.PORT);
-        this._app.set('API_VERSION', `/api/${Constant.API_VERSION}`);
+        this._app.set('API_VERSION', `/api-${Constant.API_VERSION}`);
         this.setMiddlewares();
         this.setRoutes();
     }
@@ -62,12 +63,15 @@ export abstract class TemplateExpress {
                         email: "cesar.bermudez.sierra@gmail.com",
                         url: "https://www.linkedin.com/in/cesar-bermudez-sierra/"
                     },
-                    servers: [`http://localhost:${this._app.get("PORT")}`],
+                    servers: [ `http://localhost:${this._app.get("PORT")}${this._app.get("API_VERSION")}` ],
                     schemes: ["http", "https"],
                 },
                 basePath: "/",
             },
-            apis: globSync('src/apps/**/ApiRest.*').map((route: string) => join(process.cwd(), route))
+            apis: [
+                ...globSync('src/apps/**/ApiRest.{ts, js}').map((route: string) => join(process.cwd(), route)),
+                ...globSync('src/apps/**/infrastructure/schema/*.{ts, js}').map((route: string) => join(process.cwd(), route))
+            ],
         };
     }
 }

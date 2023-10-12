@@ -12,11 +12,18 @@ export class AccountController implements IAccountController {
     }
 
     async createAccount(account: IAccountCreateDto): Promise<IResponseModel> {
-        const createdAccount = await this._accountUseCase.save(account);
-        return {
-            status: HttpStatusCode.RESPONSE_SUCCESS,
-            data: createdAccount
-        };
+        try {
+            const createdAccount = await this._accountUseCase.save(account);
+            return {
+                status: HttpStatusCode.RESPONSE_SUCCESS,
+                data: createdAccount
+            };
+        } catch (error) {
+            throw {
+                status: HttpStatusCode.UN_PROCESSABLE_ENTITY,
+                message: "Error creating account"
+            }
+        }
     }
 
     async getAccount(accountNumber: number): Promise<IResponseModel> {

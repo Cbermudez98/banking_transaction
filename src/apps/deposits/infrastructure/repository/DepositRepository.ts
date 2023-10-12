@@ -24,6 +24,7 @@ export class DepositRepository implements IDepositRepository {
             const newDeposit = await this._depositRepository.save({ ...deposit, account });
             newDeposit.account.openingBalance = newAmount;
             await queryRunner.commitTransaction();
+            newDeposit.account = undefined as any;
             return newDeposit;
         } catch (error) {
             queryRunner.rollbackTransaction();

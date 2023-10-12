@@ -18,6 +18,57 @@ class History implements RouterModel {
         this._historyController = new HistoryController(this._historyUseCase);
     }
     register(route: Router): Router {
+         /**
+         * @swagger
+         * /api-v1/history/{accountNumber}:
+         *   get:
+         *       summary: Get history of transactions for an account
+         *       tags:
+         *           - Example endpoints
+         *       description: Return all transactions
+         *       parameters:
+         *           - in: path
+         *             name: accountNumber
+         *             required: true
+         *             schema:
+         *               type: string
+         *               format: string
+         *       responses:
+         *           '200':
+         *               description: Current a deposit
+         *               content:
+         *                   'application/json':
+         *                       schema:
+         *                           $ref: '#definitions/historyTransactionArray'
+         *               example:
+         *                   amount: 500
+         *                   createdDate: 12/12/2023
+         *                   id: 1
+         *           '400':
+         *               description: Bad request
+         *               content:
+         *                   'application/json':
+         *                       schema:
+         *                           type: object
+         *                           description: Bad request
+         *                           properties:
+         *                               error: 
+         *                                   type: string
+         *               example:
+         *                   error: Internal server error
+         *           '500':
+         *               description: Internal server error
+         *               content:
+         *                   'application/json':
+         *                       schema:
+         *                           type: object
+         *                           description: Account balance
+         *                           properties:
+         *                               error: 
+         *                                   type: string
+         *               example:
+         *                   error: Internal server error
+         */
         route.get('/:accountNumber', (req: Request, res: Response) => {
             ResponseHandler.response(this._historyController.getHistory(Number(req.params.accountNumber)), req, res);
         });
