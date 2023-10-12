@@ -23,6 +23,9 @@ class Account implements RouterModel {
     }
     
     register(route: Router): Router {
+        route.get("/balance/:accountNumber", (req: Request, res: Response) => {
+            ResponseHandler.response(this._accountController.getAccount(Number(req.params.accountNumber)), req, res);
+        });
         route.post('/', ObjectValidator.validate(accountSchemaCreate), (req: Request, res: Response) => {
             ResponseHandler.response(this._accountController.createAccount(req.body), req, res);
         });
