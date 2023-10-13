@@ -32,7 +32,6 @@ export abstract class TemplateExpress {
     }
 
     private setRoute(route: Router, name: string) {
-        log.info(name);
         const swagger = this.initSwagger();
         this._app.use(`${this._app.get("API_VERSION")}/${name}`, route);
         this._app.use(`/api-docs`, SwaggerUI.serve, SwaggerUI.setup(SwaggerJsDoc(swagger)));
