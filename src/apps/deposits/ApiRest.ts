@@ -9,15 +9,19 @@ import { DepositRepository } from "./infrastructure/repository/DepositRepository
 import { ResponseHandler } from "../../helper/ResponseHandler";
 import { ObjectValidator } from "../../utils/ObjectValidateMiddleware";
 import { amountCreateDtoSchema } from "./infrastructure/schema/DepositSchema";
+import { FrameworkConfig } from "../../infrastructure/express/config/FrameworkConfig";
+import log from "../../helper/LoggerServer";
 
 class Deposit implements RouterModel {
     private _depositController: IDepositController;
+    private _router: Router;
     constructor() {
         const depositRepository: IDepositRepository = new DepositRepository();
         const useCase: IDepositUseCase = new DepositUseCase(depositRepository);
         this._depositController = new DepositController(useCase);
+        this._router = new FrameworkConfig().getRoute();
     }
-    register(route: Router): Router {
+    register(): Router {
         /**
          * @swagger
          * /api-v1/deposits/transaction/{accountNumber}:
@@ -94,10 +98,11 @@ class Deposit implements RouterModel {
          *               example:
          *                   error: Internal server error
          */
-        route.post("/transaction/:accountNumber", ObjectValidator.validate(amountCreateDtoSchema), (req, res) => {
+        this._router.post("/:accountNumber", ObjectValidator.validate(amountCreateDtoSchema), (req, res) => {
+            log.info(req.originalUrl);
             ResponseHandler.response(this._depositController.generateDeposit(req.body, Number(req.params.accountNumber)), req, res);
         });
-        return route;
+        return this._router;
     }
 }
 

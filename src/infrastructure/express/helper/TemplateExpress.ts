@@ -24,7 +24,7 @@ export abstract class TemplateExpress {
 
     public async registerRoute(routerPath: string, route: string): Promise<void> {
         const routerModel: RouterModel = await import(routerPath).then((imp) => imp.default);
-        this.setRoute(routerModel.register(this._router), route);
+        this.setRoute(routerModel.register(), route);
     }
 
     public listen(): void {
@@ -32,7 +32,6 @@ export abstract class TemplateExpress {
     }
 
     private setRoute(route: Router, name: string) {
-        log.info(name);
         const swagger = this.initSwagger();
         this._app.use(`${this._app.get("API_VERSION")}/${name}`, route);
         this._app.use(`/api-docs`, SwaggerUI.serve, SwaggerUI.setup(SwaggerJsDoc(swagger)));

@@ -10,19 +10,22 @@ import { IAccountUseCase } from "./domain/application/IAccountUseCase";
 import { AccountUseCase } from "./application/AccountUseCase";
 import { IAccountRepository } from "./domain/repository/IAccountRepository";
 import { AccountRepository } from "./infrastructure/repository/AccountRepository";
+import { FrameworkConfig } from "../../infrastructure/express/config/FrameworkConfig";
 
 class Account implements RouterModel {
     private _accountController: IAccountController;
     private _accountUseCase: IAccountUseCase;
     private _accountRepository: IAccountRepository;
+    private _router: Router;
 
     constructor() {
         this._accountRepository = new AccountRepository();
         this._accountUseCase = new AccountUseCase(this._accountRepository);
         this._accountController = new AccountController(this._accountUseCase);
+        this._router = new FrameworkConfig().getRoute();
     }
     
-    register(route: Router): Router {
+    register(): Router {
         /**
          * @swagger
          * /api-v1/accounts/balance/{accountNumber}:
@@ -76,7 +79,7 @@ class Account implements RouterModel {
          *               example:
          *                   error: Internal server error
          */
-        route.get("/balance/:accountNumber", (req: Request, res: Response) => {
+        this._router.get("/balance/:accountNumber", (req: Request, res: Response) => {
             ResponseHandler.response(this._accountController.getAccount(Number(req.params.accountNumber)), req, res);
         });
         /**
@@ -139,10 +142,10 @@ class Account implements RouterModel {
          *               example:
          *                   error: Internal server error
          */
-        route.post('/', ObjectValidator.validate(accountSchemaCreate), (req: Request, res: Response) => {
+        this._router.post('/', ObjectValidator.validate(accountSchemaCreate), (req: Request, res: Response) => {
             ResponseHandler.response(this._accountController.createAccount(req.body), req, res);
         });
-        return route;
+        return this._router;
     }
 }
 

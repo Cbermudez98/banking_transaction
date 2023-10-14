@@ -7,17 +7,20 @@ import { IHistoryController } from "./domain/controller/IHistoryController";
 import { HistoryRepository } from "./infrastructure/repository/HistoryTransactionRepository";
 import { HistoryUseCase } from "./application/HistoryUseCase";
 import { HistoryController } from "./infrastructure/controller/IHistoryController";
+import { FrameworkConfig } from "../../infrastructure/express/config/FrameworkConfig";
 
 class History implements RouterModel {
     private _historyUseCase: IHistoryUseCase;
     private _historyRepository: IHistoryRepository;
     private _historyController: IHistoryController;
+    private _router: Router;
     constructor() {
         this._historyRepository = new HistoryRepository();
         this._historyUseCase = new HistoryUseCase(this._historyRepository);
         this._historyController = new HistoryController(this._historyUseCase);
+        this._router = new FrameworkConfig().getRoute();
     }
-    register(route: Router): Router {
+    register(): Router {
          /**
          * @swagger
          * /api-v1/history/{accountNumber}:
@@ -69,10 +72,10 @@ class History implements RouterModel {
          *               example:
          *                   error: Internal server error
          */
-        route.get('/:accountNumber', (req: Request, res: Response) => {
+        this._router.get('/:accountNumber', (req: Request, res: Response) => {
             ResponseHandler.response(this._historyController.getHistory(Number(req.params.accountNumber)), req, res);
         });
-        return route;
+        return this._router;
     }
 }
 

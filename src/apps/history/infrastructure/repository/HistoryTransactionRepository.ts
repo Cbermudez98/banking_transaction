@@ -16,7 +16,8 @@ export class HistoryRepository implements IHistoryRepository {
                 where: { accountNumber }
             });
             const transactions: IHistoryTransaction[] = data[0].withdrawals.map((withdrawal) => ({ ...withdrawal, typeTransaction: "withdrawal" }))
-                .concat(data[0].deposits.map(item => ({ ...item, typeTransaction: "deposit"})));
+                .concat(data[0].deposits.map(item => ({ ...item, typeTransaction: "deposit"})))
+                .sort((a: IHistoryTransaction, b: IHistoryTransaction) => a.id - b.id);
             ;
             return transactions;
         } catch (error) {
