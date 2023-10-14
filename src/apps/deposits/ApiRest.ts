@@ -10,7 +10,6 @@ import { ResponseHandler } from "../../helper/ResponseHandler";
 import { ObjectValidator } from "../../utils/ObjectValidateMiddleware";
 import { amountCreateDtoSchema } from "./infrastructure/schema/DepositSchema";
 import { FrameworkConfig } from "../../infrastructure/express/config/FrameworkConfig";
-import log from "../../helper/LoggerServer";
 
 class Deposit implements RouterModel {
     private _depositController: IDepositController;
@@ -24,7 +23,7 @@ class Deposit implements RouterModel {
     register(): Router {
         /**
          * @swagger
-         * /api-v1/deposits/transaction/{accountNumber}:
+         * /api-v1/deposits/{accountNumber}:
          *   post:
          *       summary: Generate a deposit to an account
          *       tags:
@@ -99,7 +98,6 @@ class Deposit implements RouterModel {
          *                   error: Internal server error
          */
         this._router.post("/:accountNumber", ObjectValidator.validate(amountCreateDtoSchema), (req, res) => {
-            log.info(req.originalUrl);
             ResponseHandler.response(this._depositController.generateDeposit(req.body, Number(req.params.accountNumber)), req, res);
         });
         return this._router;
