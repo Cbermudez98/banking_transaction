@@ -101,7 +101,6 @@ class Withdrawal implements RouterModel {
          *                   error: Internal server error
          */
         this._router.post("/:accountNumber", ObjectValidator.validate(withdrawalSchema), (req: Request, res: Response) => {
-            log.info(req.originalUrl);
             ResponseHandler.response(this._withdrawalController.generateCashOut(req.body, Number(req.params.accountNumber)), req, res);
         });
         return this._router;
