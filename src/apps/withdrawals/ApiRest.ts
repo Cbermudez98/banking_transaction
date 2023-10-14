@@ -10,17 +10,20 @@ import { ObjectValidator } from "../../utils/ObjectValidateMiddleware";
 import { withdrawalSchema } from "./infrastructure/schema/IWithdrawalSchema";
 import { ResponseHandler } from "../../helper/ResponseHandler";
 import log from "../../helper/LoggerServer";
+import { FrameworkConfig } from "../../infrastructure/express/config/FrameworkConfig";
 
 class Withdrawal implements RouterModel {
     private _withdrawalController: IWithdrawalController;
     private _withdrawalUseCase: IWithdrawalUseCase;
     private _withdrawalRepository: IWithdrawalRepository;
+    private _router: Router;
     constructor() {
         this._withdrawalRepository = new WithdrawalRepository();
         this._withdrawalUseCase = new WithdrawalUseCase(this._withdrawalRepository);
         this._withdrawalController = new WithdrawalController(this._withdrawalUseCase);
+        this._router = new FrameworkConfig().getRoute();
     }
-    register(route: Router): Router {
+    register(): Router {
         /**
          * @swagger
          * /api-v1/withdrawals/{accountNumber}:
@@ -97,11 +100,11 @@ class Withdrawal implements RouterModel {
          *               example:
          *                   error: Internal server error
          */
-        route.post("/:accountNumber", ObjectValidator.validate(withdrawalSchema), (req: Request, res: Response) => {
+        this._router.post("/:accountNumber", ObjectValidator.validate(withdrawalSchema), (req: Request, res: Response) => {
             log.info(req.originalUrl);
             ResponseHandler.response(this._withdrawalController.generateCashOut(req.body, Number(req.params.accountNumber)), req, res);
         });
-        return route;
+        return this._router;
     }
 }
 
