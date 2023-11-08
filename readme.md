@@ -1,44 +1,74 @@
-### Proyecto de API REST para Gestión de Cuentas Bancarias
+### REST API Project for Bank Account Management
 
-#### Descripción del proyecto:
+**Getting Started:**
 
-El objetivo de este proyecto es desarrollar una API REST para gestionar cuentas bancarias y transacciones. La API debe ser capaz de crear cuentas bancarias, realizar depósitos y retiros, así como proporcionar un historial de transacciones para cada cuenta.
+To get started with this project, follow these steps:
 
-#### Requisitos del proyecto:
+1. Clone the project repository:
+   ```shell
+   git clone https://github.com/Cbermudez98/banking_transaction.git
+   ```
 
-1. **Creación de cuentas bancarias**:
-   - Debe ser posible crear una cuenta bancaria proporcionando un nombre de titular y un saldo inicial.
-   - Cada cuenta debe tener un número de cuenta único generado automáticamente.
+2. Install project dependencies:
+   ```shell
+   npm i
+   ```
 
-2. **Depósitos**:
-   - Los usuarios deben poder realizar depósitos en sus cuentas.
-   - Cada transacción de depósito debe registrarse en la base de datos.
+3. Create the necessary database tables:
+   ```shell
+   npm run migration:run
+   ```
 
-3. **Retiros**:
-   - Los usuarios deben poder realizar retiros de sus cuentas.
-   - Debe asegurarse de que no se permitan retiros si el saldo de la cuenta es insuficiente.
-   - Cada transacción de retiro debe registrarse en la base de datos.
+4. Execute the project:
+   ```shell
+   npm run start:dev
+   ```
 
-4. **Consulta de saldo**:
-   - Los usuarios deben poder consultar el saldo actual de sus cuentas.
+**See Documentation:**
 
-5. **Historial de transacciones**:
-   - Debe ser posible consultar el historial de transacciones para una cuenta específica.
+To access the API documentation, open a web browser and go to the following URL after starting the project:
 
-6. **Transacciones seguras**:
-   - Todas las transacciones (depósitos y retiros) deben realizarse dentro de una transacción de base de datos para garantizar la consistencia de los datos.
-   - En caso de fallo durante una transacción, se debe asegurar que la base de datos revierta cualquier cambio realizado durante la transacción.
+[http://localhost:{port}/api-docs](http://localhost:{port}/api-docs)
 
-#### Tecnologías requeridas:
+Replace `{port}` with the actual port number on which the project is running.
 
-- Node.js y Express.js para la creación de la API REST.
-- Una base de datos relacional como PostgreSQL o MySQL para almacenar las cuentas bancarias y las transacciones.
-- Utiliza un ORM (Object-Relational Mapping) como Sequelize para interactuar con la base de datos.
-- Implementa la gestión de transacciones en la base de datos para garantizar la integridad de los datos.
+#### Project Description:
 
-#### Entregables:
+The objective of this project is to develop a REST API for managing bank accounts and transactions. The API should be capable of creating bank accounts, making deposits and withdrawals, as well as providing a transaction history for each account.
 
-- API REST completamente funcional que cumpla con los requisitos mencionados.
-- Documentación de la API que explique cómo usarla, incluyendo rutas, métodos y ejemplos de solicitud y respuesta.
+#### Project Requirements:
 
-Este proyecto te dará la oportunidad de aprender a trabajar con transacciones en una base de datos relacional en el contexto de una aplicación del mundo real. Además, te permitirá practicar el desarrollo de API RESTful con Node.js y Express.js.
+1. **Creation of Bank Accounts**:
+   - It should be possible to create a bank account by providing an account holder's name and an initial balance.
+   - Each account should have a unique account number generated automatically.
+
+2. **Deposits**:
+   - Users should be able to make deposits into their accounts.
+   - Each deposit transaction should be recorded in the database.
+
+3. **Withdrawals**:
+   - Users should be able to make withdrawals from their accounts.
+   - Ensure that withdrawals are not allowed if the account balance is insufficient.
+   - Each withdrawal transaction should be recorded in the database.
+
+4. **Balance Inquiry**:
+   - Users should be able to inquire about the current balance of their accounts.
+
+5. **Transaction History**:
+   - It should be possible to retrieve the transaction history for a specific account.
+
+6. **Secure Transactions**:
+   - All transactions (deposits and withdrawals) should be carried out within a database transaction to ensure data consistency.
+   - In the event of a failure during a transaction, the database should revert any changes made during the transaction.
+
+#### Required Technologies:
+
+- Node.js and Express.js for creating the REST API.
+- A relational database such as PostgreSQL or MySQL for storing bank accounts and transactions.
+- Use an Object-Relational Mapping (ORM) like Sequelize to interact with the database.
+- Implement transaction management in the database to ensure data integrity.
+
+#### Deliverables:
+
+- A fully functional REST API that meets the mentioned requirements.
+- API documentation explaining how to use it, including routes, methods, and examples of requests and responses.
